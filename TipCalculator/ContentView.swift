@@ -7,7 +7,8 @@ struct ContentView: View {
     @State private var numberOfPeople = 1
     @State private var individualShare: Double = 0
     @State private var darkThemeEnabled = false
-
+    @State private var isShowingSettings = false  // New state variable for the modal
+    
     // MARK: - Calculations
     func calculateShare() {
         individualShare = totalBill / Double(numberOfPeople + 1)
@@ -22,6 +23,7 @@ struct ContentView: View {
         let bill = Double(billAmount) ?? 0
         return bill + tipValue
     }
+
 
     // MARK: - UI Components
     func billAmountSection() -> some View {
@@ -103,12 +105,17 @@ struct ContentView: View {
             .onChange(of: billAmount) { _ in calculateShare() }
             .navigationTitle("Tip Calculator")
             .navigationBarItems(trailing:
-                NavigationLink(destination: SettingsView(darkThemeEnabled: $darkThemeEnabled)) {
+                Button(action: {
+                    self.isShowingSettings = true
+                }) {
                     Image(systemName: "gearshape.fill")
                         .imageScale(.large)
                         .accessibilityLabel(Text("Settings"))
                 }
             )
+            .sheet(isPresented: $isShowingSettings) {
+                SettingsView(darkThemeEnabled: $darkThemeEnabled)
+            }
         }
         .environment(\.colorScheme, darkThemeEnabled ? .dark : .light)
         .dismissKeyboardOnTap()
