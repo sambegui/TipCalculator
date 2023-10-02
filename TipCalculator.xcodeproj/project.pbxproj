@@ -14,6 +14,8 @@
 		FBA814A52ACA6DE000130B77 /* TipCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA814A42ACA6DE000130B77 /* TipCalculatorTests.swift */; };
 		FBA814AF2ACA6DE000130B77 /* TipCalculatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA814AE2ACA6DE000130B77 /* TipCalculatorUITests.swift */; };
 		FBA814B12ACA6DE000130B77 /* TipCalculatorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA814B02ACA6DE000130B77 /* TipCalculatorUITestsLaunchTests.swift */; };
+		FBA814BE2ACA746B00130B77 /* DismissKeyboardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA814BD2ACA746B00130B77 /* DismissKeyboardModifier.swift */; };
+		FBA814C02ACA76E700130B77 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA814BF2ACA76E700130B77 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,8 @@
 		FBA814AA2ACA6DE000130B77 /* TipCalculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TipCalculatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBA814AE2ACA6DE000130B77 /* TipCalculatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipCalculatorUITests.swift; sourceTree = "<group>"; };
 		FBA814B02ACA6DE000130B77 /* TipCalculatorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipCalculatorUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		FBA814BD2ACA746B00130B77 /* DismissKeyboardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissKeyboardModifier.swift; sourceTree = "<group>"; };
+		FBA814BF2ACA76E700130B77 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +100,8 @@
 			children = (
 				FBA814932ACA6DDF00130B77 /* TipCalculatorApp.swift */,
 				FBA814952ACA6DDF00130B77 /* ContentView.swift */,
+				FBA814BD2ACA746B00130B77 /* DismissKeyboardModifier.swift */,
+				FBA814BF2ACA76E700130B77 /* SettingsView.swift */,
 				FBA814972ACA6DE000130B77 /* Assets.xcassets */,
 				FBA814992ACA6DE000130B77 /* Preview Content */,
 			);
@@ -257,6 +263,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBA814BE2ACA746B00130B77 /* DismissKeyboardModifier.swift in Sources */,
+				FBA814C02ACA76E700130B77 /* SettingsView.swift in Sources */,
 				FBA814962ACA6DDF00130B77 /* ContentView.swift in Sources */,
 				FBA814942ACA6DDF00130B77 /* TipCalculatorApp.swift in Sources */,
 			);
