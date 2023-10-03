@@ -9,7 +9,7 @@ struct ContentView: View {
     @State private var isShowingSettings = false  // New state variable for the modal
     @State private var darkThemeEnabled = UserDefaults.standard.bool(forKey: "darkModeEnabled")
     @State private var includeTipInShare = true
-    @State private var tipOptions = [10, 15, 18, 25]
+    @State private var tipOptions = [5, 10, 15, 20]
     @State private var selectedTipIndex = 1  // Default to 15%
     @State private var usePredefinedTips = UserDefaults.standard.bool(forKey: "usePredefinedTips")
 
