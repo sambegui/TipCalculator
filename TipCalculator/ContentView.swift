@@ -1,36 +1,26 @@
-
 import SwiftUI
 
 struct ContentView: View {
     @State private var billAmount = ""
     @State private var tipPercentage = 15
-    @State private var numberOfPeople = 1
+    @State private var numberOfPeople = ""
     @State private var individualShare: Double = 0
-    @State private var isShowingSettings = false  // New state variable for the modal
+    @State private var isShowingSettings = false
     @State private var darkThemeEnabled = UserDefaults.standard.bool(forKey: "darkModeEnabled")
     @State private var includeTipInShare = true
     @State private var tipOptions = [5, 10, 15, 20]
-    @State private var selectedTipIndex = 1  // Default to 15%
+    @State private var selectedTipIndex = 1
     @State private var usePredefinedTips = UserDefaults.standard.bool(forKey: "usePredefinedTips")
-
-
-
     
-    // MARK: - Calculations
     func calculateShare() {
-        // Debug print
-        print("Selected tip index: \(selectedTipIndex)")
-        print("Current tip percentage: \(tipPercentage)")
-
-        // Update tipPercentage based on the selected index if predefined tips are used
         if usePredefinedTips {
             tipPercentage = tipOptions[selectedTipIndex]
         }
         
-        individualShare = includeTipInShare ? totalBill / Double(numberOfPeople + 1) : (totalBill - tipValue) / Double(numberOfPeople + 1)
+        let peopleCount = Double(numberOfPeople) ?? 1
+        individualShare = includeTipInShare ? totalBill / peopleCount : (totalBill - tipValue) / peopleCount
     }
 
-    
     var tipValue: Double {
         let bill = Double(billAmount) ?? 0
         return bill * Double(tipPercentage) / 100
@@ -41,8 +31,6 @@ struct ContentView: View {
         return bill + tipValue
     }
     
-    
-    // MARK: - UI Components
     func billAmountSection() -> some View {
         Section(header: Text("Bill Amount")) {
             TextField("Enter amount", text: $billAmount)
@@ -50,18 +38,14 @@ struct ContentView: View {
         }
     }
     
-    func numberPickerWithLabel(title: String, label: String, selection: Binding<Int>, range: Range<Int>) -> some View {
-        HStack {
-            Text(label)
-                .font(.headline)
-            Spacer()
-            Picker(title, selection: selection) {
-                ForEach(range) {
-                    Text("\($0)")
-                }
+    func numberOfPeopleSection() -> some View {
+        Section(header: Text("Number of People")) {
+            HStack {
+                TextField("Enter number of people", text: $numberOfPeople)
+                    .keyboardType(.numberPad)
+                    .onChange(of: numberOfPeople) { _ in calculateShare() }
+                peopleIcon()
             }
-            .pickerStyle(WheelPickerStyle())
-            .frame(width: 100)
         }
     }
     
@@ -79,36 +63,34 @@ struct ContentView: View {
             .foregroundColor(.blue)
     }
     
-    // MARK: - Body
     var body: some View {
         NavigationView {
             Form {
                 billAmountSection()
                 
-                // Number of People Picker
-                Section(header: Text("Number of People")) {
-                    HStack {
-                        numberPickerWithLabel(title: "Number of People", label: "People", selection: $numberOfPeople, range: 1..<100)
-                            .onChange(of: numberOfPeople) { _ in calculateShare() }
-                        peopleIcon()
-                    }
-                }
+                numberOfPeopleSection()
                 
-                // Tip Percentage Picker
                 Section(header: Text("Tip Percentage")) {
                     Group {
                         if usePredefinedTips {
-                                Picker("", selection: $selectedTipIndex) {
-                                    ForEach(0..<tipOptions.count) { index in
-                                        Text("\(self.tipOptions[index])%")
-                                    }
+                            Picker("", selection: $selectedTipIndex) {
+                                ForEach(0..<tipOptions.count) { index in
+                                    Text("\(self.tipOptions[index])%")
                                 }
-                                .pickerStyle(SegmentedPickerStyle())
-                                .onChange(of: selectedTipIndex) { _ in calculateShare() }
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                            .onChange(of: selectedTipIndex) { _ in calculateShare() }
                         } else {
+                            Slider(value: Binding(get: {
+                                Double(self.tipPercentage)
+                            }, set: { newValue in
+                                self.tipPercentage = Int(newValue)
+                                calculateShare()
+                            }), in: 0...100, step: 1)
+                            .accentColor(.blue)
                             HStack {
-                                numberPickerWithLabel(title: "Tip Percentage", label: "Tip", selection: $tipPercentage, range: 0..<100)
-                                    .onChange(of: tipPercentage) { _ in calculateShare() }
+                                Text("Tip: \(tipPercentage)%")
+                                Spacer()
                                 tipIcon()
                             }
                         }
@@ -131,13 +113,13 @@ struct ContentView: View {
             .onChange(of: billAmount) { _ in calculateShare() }
             .navigationTitle("Tip Calculator")
             .navigationBarItems(trailing:
-                                    Button(action: {
-                self.isShowingSettings = true
-            }) {
-                Image(systemName: "gearshape.fill")
-                    .imageScale(.large)
-                    .accessibilityLabel(Text("Settings"))
-            }
+                Button(action: {
+                    self.isShowingSettings = true
+                }) {
+                    Image(systemName: "gearshape.fill")
+                        .imageScale(.large)
+                        .accessibilityLabel(Text("Settings"))
+                }
             )
             .sheet(isPresented: $isShowingSettings) {
                 SettingsView(
@@ -153,18 +135,26 @@ struct ContentView: View {
             }
         }
         .environment(\.colorScheme, darkThemeEnabled ? .dark : .light)
-        .onReceive([self.darkThemeEnabled].publisher.first()) { (value) in
+        .onChange(of: darkThemeEnabled) { (value) in
             UserDefaults.standard.set(value, forKey: "darkModeEnabled")
         }
-        .onReceive([self.usePredefinedTips].publisher.first()) { (value) in
+        .onChange(of: usePredefinedTips) { (value) in
             UserDefaults.standard.set(value, forKey: "usePredefinedTips")
         }
-        .dismissKeyboardOnTap()
+        .hideKeyboardOnTap()
     }
     
     struct ContentView_Previews: PreviewProvider {
         static var previews: some View {
             ContentView()
+        }
+    }
+}
+
+extension View {
+    func hideKeyboardOnTap() -> some View {
+        self.onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
 }
