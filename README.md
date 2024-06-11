@@ -1,4 +1,4 @@
 # TipCalculator
 Basic iOS Tip Calculator
 
-![RPReplay_Final1696293319](https://github.com/sambegui/TipCalculator/assets/125210256/012a0a51-424c-4dfd-82a2-4770b18d81aa)
+![ScreenRecording_06-11-2024_03-48-46_1](https://github.com/sambegui/TipCalculator/assets/125210256/137578f3-1ace-4df2-a85e-6aeb44f77c91)
